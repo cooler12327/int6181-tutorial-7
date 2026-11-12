@@ -42,6 +42,8 @@ def main():
         
         print("Which cell to mark? i:[1..3], j:[1..3]: ", end="")
         i, j = map(int, input().split())
+        i -= 1
+        j -= 1
         
         if turn == False:
             game[i][j] = 'X'

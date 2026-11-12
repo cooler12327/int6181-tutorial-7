@@ -23,42 +23,46 @@ def is_win(game):
 
 
 def main():
-    # Initialize the game board
     game = [[' ' for _ in range(3)] for _ in range(3)]
-    player1 = 'X'
-    player2 = 'O'
-    turn = True  # False for player 1's turn, True for player 2's turn. Player 1 first.
-    
+    markers = ('X', 'O')
+    player = 0
+    moves = 0
+
     print("X = Player 1")
     print("O = Player 2")
-    
-    for n in range(9):
-        turn = not turn  # Toggle turn
-        
-        if turn == False:
-            print("Player 1: ", end="")
-        else:
-            print("Player 2: ", end="")
-        
+
+    while moves < 9:
+        print(f"Player {player + 1}: ", end="")
         print("Which cell to mark? i:[1..3], j:[1..3]: ", end="")
-        i, j = map(int, input().split())
-        
-        if turn == False:
-            game[i][j] = 'X'
-        else:
-            game[i][j] = 'O'
-        
+        try:
+            i, j = map(int, input().split())
+        except ValueError:
+            print("Enter exactly two integers separated by whitespace.")
+            continue
+
+        if not (1 <= i <= 3 and 1 <= j <= 3):
+            print("Coordinates must be between 1 and 3.")
+            continue
+
+        row, column = i - 1, j - 1
+        if game[row][column] != ' ':
+            print("That cell is already occupied. Choose another cell.")
+            continue
+
+        game[row][column] = markers[player]
+        moves += 1
+
         if is_win(game):
             print("Win!")
             break
-    
-    if n == 8:  # All 9 cells have been filled (n goes 0 to 8)
-        print("Tie!")
-    
-    # Show the game to console
-    print(game[0][0] + " " + game[0][1] + " " + game[0][2])
-    print(game[1][0] + " " + game[1][1] + " " + game[1][2])
-    print(game[2][0] + " " + game[2][1] + " " + game[2][2])
+        if moves == 9:
+            print("Tie!")
+            break
+
+        player = 1 - player
+
+    for row in game:
+        print(' '.join(row))
 
 
 if __name__ == "__main__":
